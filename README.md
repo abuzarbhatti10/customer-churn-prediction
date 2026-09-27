@@ -161,3 +161,6 @@ I learned that accuracy alone is not enough for an imbalanced classification pro
 ### Biggest Lesson
 
 The biggest lesson was that **model evaluation should consider both technical performance and business costs**, rather than relying only on accuracy.
+### Kaggle Notebook
+
+[Week 2 - Building ML Models]((https://www.kaggle.com/code/abuzarbhatti068/week-2-building-ml-models))
