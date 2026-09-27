@@ -60,3 +60,104 @@ The analysis shows that **contract type, customer tenure, monthly charges, inter
 ### Setup
 Open the Kaggle notebook or run locally:
 pip install pandas numpy matplotlib seaborn
+## Week 2: Building ML Models
+
+### Project Overview
+
+In Week 2, I built and evaluated different machine learning models for Telco Customer Churn Prediction. I worked with Logistic Regression, Decision Tree, Random Forest, class balancing, threshold selection, and feature engineering.
+
+### Dataset & Preprocessing
+
+* Total customers: **7,043**
+* Features after encoding: **30**
+* Training samples: **5,634**
+* Testing samples: **1,409**
+* Churn rate: **26.5%**
+* Missing values after cleaning: **0**
+
+### Baseline Model
+
+The baseline always predicted that customers would stay.
+
+* Accuracy: **73.5%**
+* Churners caught: **0**
+
+This showed that accuracy alone can be misleading for an imbalanced dataset.
+
+### Logistic Regression
+
+At threshold **0.50**:
+
+* Accuracy: **0.807**
+* Precision: **0.658**
+* Recall: **0.567**
+* F1: **0.609**
+* AUC: **0.842**
+
+Top churn risk factors included **Fiber optic, TotalCharges, and StreamingMovies**. Important protective factors included **tenure, MonthlyCharges, and Two-year contracts**.
+
+### Confusion Matrix
+
+* TN: **925**
+* FP: **110**
+* FN: **162**
+* TP: **212**
+
+The model missed **162 churners**, showing why recall is important.
+
+### Threshold Analysis
+
+The business costs were:
+
+* Missed churner: **PKR 6,000**
+* Unnecessary retention offer: **PKR 1,000**
+
+Theoretical threshold: **0.14**
+Empirical best threshold: **0.15**
+
+At threshold **0.15**, the model caught **344 churners** compared with **212** at threshold 0.50. This means **132 more churners** were caught, with **327 additional false alarms**.
+
+### Decision Tree & Random Forest
+
+The Decision Tree showed overfitting as depth increased.
+
+Random Forest results:
+
+* OOB accuracy: **0.803**
+* Test accuracy: **0.807**
+* Test AUC: **0.842**
+
+Top features by permutation importance were **tenure, TotalCharges, and Contract_Two year**.
+
+### Class Balancing
+
+| Model       | Precision | Recall |    F1 |
+| ----------- | --------: | -----: | ----: |
+| LR Default  |     0.658 |  0.567 | 0.609 |
+| LR Balanced |     0.505 |  0.781 | 0.613 |
+
+Balanced weights increased recall but reduced precision.
+
+### Feature Engineering
+
+Engineered features:
+
+* `n_services`
+* `is_new`
+* `charge_per_mo`
+* `price_jump`
+
+Random Forest AUC:
+
+**Before:** 0.8422
+**After:** 0.8420
+
+The engineered features did not improve the AUC.
+
+### What I Learned
+
+I learned that accuracy alone is not enough for an imbalanced classification problem. I learned how to interpret Logistic Regression using odds ratios, evaluate models using precision, recall, F1 and AUC, select a threshold using business costs, identify overfitting in Decision Trees, and use Random Forest and feature engineering for comparison.
+
+### Biggest Lesson
+
+The biggest lesson was that **model evaluation should consider both technical performance and business costs**, rather than relying only on accuracy.
