@@ -164,3 +164,64 @@ The biggest lesson was that **model evaluation should consider both technical pe
 ### Kaggle Notebook
 
 [Week 2 - Building ML Models]((https://www.kaggle.com/code/abuzarbhatti068/week-2-building-ml-models))
+
+## Week 3: Model Optimization and Unsupervised Learning
+
+### Model stability
+
+Using the same Logistic Regression model across 20 random seeds, validation accuracy ranged from **0.780 to 0.828**, with a standard deviation of **0.0104**. This showed why relying on a single train/test split can give an unstable picture of model performance.
+
+### 5-Fold Cross-Validation
+
+| Model               |                 AUC |        Recall |            F1 |
+| ------------------- | ------------------: | ------------: | ------------: |
+| Logistic Regression |       0.846 ± 0.013 | 0.545 ± 0.042 | 0.594 ± 0.030 |
+| Random Forest       |       0.844 ± 0.011 | 0.496 ± 0.019 | 0.573 ± 0.020 |
+| XGBoost             | **0.8502 ± 0.0117** |             — |             — |
+
+### Hyperparameter tuning
+
+Random Forest Grid Search achieved a best CV AUC of **0.8468** using 120 fits in **111 seconds**. Random Search achieved **0.8464** using the same 120 fits in **119 seconds**.
+
+The best Random Forest parameters from Random Search were:
+
+* `max_depth = 15`
+* `min_samples_leaf = 15`
+* `max_features ≈ 0.213`
+
+### XGBoost
+
+Early stopping selected **247 trees** with a validation AUC of **0.8541**.
+
+The tuned XGBoost model achieved a **5-fold CV AUC of 0.8502**, making it the best model in the final cross-validation comparison.
+
+### Final model
+
+**XGBoost** was selected using cross-validation.
+
+The model was evaluated on the locked test set exactly once:
+
+* Test AUC: **0.8483**
+* Recall: **0.521**
+* Precision: **0.659**
+
+The test AUC was only **0.0019 lower** than the CV mean of 0.8502.
+
+### Customer segmentation
+
+K-means produced **4 customer segments**:
+
+| Segment                        |   Churn |
+| ------------------------------ | ------: |
+| Short-Tenure, High-Charge Risk | **43%** |
+| New, Low-Engagement Risk       | **32%** |
+| Loyal High-Spenders            | **14%** |
+| Long-Tenure Budget Customers   |  **5%** |
+
+### PCA
+
+**15 of 30 components** were required to explain 90% of the variance. PC1 was strongly associated with `InternetService_No` and several matching `"No internet service"` dummy variables, revealing redundancy in the one-hot encoded features.
+
+### Biggest lesson
+
+**A single model score can be misleading: cross-validation gives a more honest estimate of model performance, while the final test set should be used only once.**
